@@ -129,7 +129,6 @@ dmypy.json
 
 # Docker
 *.dockerignore
-Dockerfile
 
 # Ignore the service virtualenv just in case
 services/IoTapi/.venv/
