@@ -1,0 +1,68 @@
+services:
+  iotapi:
+    build:
+      context: ./services/IoTapi
+      dockerfile: Dockerfile
+    image: iotapi:latest
+    container_name: iotapi
+    restart: unless-stopped
+    env_file: ./services/IoTapi/.env
+    environment:
+      - DATABASE_URL=postgresql://iotuser:iotpass@postgres:5432/iotdb
+      - MQTT_BROKER=mosquitto
+    depends_on:
+      - postgres
+      - mosquitto
+    ports:
+      - "8000:8000"
+    networks:
+      - iot-network
+
+  iot-frontend:
+    build:
+      context: ./services/Iotfrontend/iot-react-app
+      dockerfile: Dockerfile
+    image: iot-react-app:latest
+    container_name: iot-react-app
+    restart: unless-stopped
+    ports:
+      - "3000:80" # maps host 3000 -> container 80 (nginx)
+    networks:
+      - iot-network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: iot-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: iotuser
+      POSTGRES_PASSWORD: iotpass
+      POSTGRES_DB: iotdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - iot-network
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "9001:9001" # websocket port if needed
+    volumes:
+      - mosq-data:/mosquitto/data
+      - mosq-conf:/mosquitto/config
+    networks:
+      - iot-network
+
+volumes:
+  pgdata:
+  mosq-data:
+  mosq-conf:
+
+networks:
+  iot-network:
+    driver: bridge
