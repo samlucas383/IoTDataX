@@ -6,7 +6,6 @@ services:
     image: iotapi:latest
     container_name: iotapi
     restart: unless-stopped
-    env_file: ./services/IoTapi/.env
     environment:
       - DATABASE_URL=postgresql://iotuser:iotpass@postgres:5432/iotdb
       - MQTT_BROKER=mosquitto
@@ -27,6 +26,18 @@ services:
     restart: unless-stopped
     ports:
       - "3000:80" # maps host 3000 -> container 80 (nginx)
+    networks:
+      - iot-network
+
+  swift-app:
+    build:
+      context: ./services/Iotfrontend/swift-app
+      dockerfile: Dockerfile
+    image: swift-app:latest
+    container_name: swift-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
     networks:
       - iot-network
 
