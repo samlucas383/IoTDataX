@@ -29,10 +29,6 @@ yarn-error.log*
 # Local env files
 .env.local.local
 
-# Docker
-/.dockerignore
-Dockerfile
-
 # cache and build artifacts
 .cache/
 
