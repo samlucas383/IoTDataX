@@ -132,3 +132,13 @@ dmypy.json
 
 # Ignore the service virtualenv just in case
 services/IoTapi/.venv/
+# example env files and local .env
+.env
+.env.local
+.env.*.local
+
+# Swift build artifacts (swift-app)
+services/Iotfrontend/swift-app/.build/
+services/Iotfrontend/swift-app/.swiftpm/
+services/Iotfrontend/swift-app/.package.resolved
+services/Iotfrontend/swift-app/App
