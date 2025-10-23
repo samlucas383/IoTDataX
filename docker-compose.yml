@@ -41,6 +41,25 @@ services:
     networks:
       - iot-network
 
+  device-sim:
+    build:
+      context: ./services/device-sim
+      dockerfile: Dockerfile
+    image: device-sim:latest
+    container_name: device-sim
+    restart: unless-stopped
+    environment:
+      - MQTT_BROKER=mosquitto
+      - MQTT_PORT=1883
+      - MQTT_USER=
+      - MQTT_PASS=
+      - NUM_DEVICES=3
+      - INTERVAL=5
+      - PYTHONUNBUFFERED=1       
+    command: ["python","-u","sim.py"] 
+    networks:
+      - iot-network
+
   postgres:
     image: postgres:15-alpine
     container_name: iot-postgres
@@ -65,9 +84,15 @@ services:
       - "9001:9001" # websocket port if needed
     volumes:
       - mosq-data:/mosquitto/data
-      - mosq-conf:/mosquitto/config
+      - ./services/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
     networks:
       - iot-network
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_pub -h 127.0.0.1 -t hc -m ok -r && mosquitto_sub -h 127.0.0.1 -t hc -C 1 -W 2 >/dev/null"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
 
 volumes:
   pgdata:

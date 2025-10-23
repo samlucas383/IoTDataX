@@ -1,0 +1,20 @@
+# Core web framework
+fastapi==0.115.0
+uvicorn[standard]==0.30.1
+
+# Database
+asyncpg==0.29.0
+sqlalchemy==2.0.30
+alembic==1.13.1
+psycopg2-binary==2.9.9
+
+# MQTT (optional for your consumer)
+paho-mqtt==1.6.1
+
+# Data and config tools
+requests==2.32.3
+PyYAML==6.0.1
+jmespath==1.0.1
+python-dotenv==1.0.1
+loguru==0.7.2
+pydantic==2.8.0

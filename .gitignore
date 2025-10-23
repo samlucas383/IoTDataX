@@ -136,9 +136,3 @@ services/IoTapi/.venv/
 .env
 .env.local
 .env.*.local
-
-# Swift build artifacts (swift-app)
-services/Iotfrontend/swift-app/.build/
-services/Iotfrontend/swift-app/.swiftpm/
-services/Iotfrontend/swift-app/.package.resolved
-services/Iotfrontend/swift-app/App

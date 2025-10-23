@@ -70,3 +70,7 @@ docker compose build --no-cache swift-app
 ```
 
 Note: Swift build artifacts are ignored by `.gitignore` to avoid committing large or platform-specific files.
+
+MQTT auth for simulator
+-----------------------
+If your Mosquitto requires authentication, set `MQTT_USER` and `MQTT_PASS` in your `.env` or override them in `docker-compose.yml` for the `device-sim` service.
