@@ -41,6 +41,7 @@ services:
     networks:
       - iot-network
 
+  # Generic device simulator
   device-sim:
     build:
       context: ./services/device-sim
@@ -53,10 +54,100 @@ services:
       - MQTT_PORT=1883
       - MQTT_USER=
       - MQTT_PASS=
-      - NUM_DEVICES=3
-      - INTERVAL=5
+      - NUM_DEVICES=2
+      - INTERVAL=10
       - PYTHONUNBUFFERED=1       
     command: ["python","-u","sim.py"] 
+    depends_on:
+      - mosquitto
+    networks:
+      - iot-network
+
+  # ESP32 simulators
+  device-sim-esp32:
+    build:
+      context: ./services/device-sim
+      dockerfile: Dockerfile
+    image: device-sim:latest
+    container_name: device-sim-esp32
+    restart: unless-stopped
+    environment:
+      - MQTT_BROKER=mosquitto
+      - MQTT_PORT=1883
+      - MQTT_USER=
+      - MQTT_PASS=
+      - NUM_DEVICES=2
+      - INTERVAL=8
+      - PYTHONUNBUFFERED=1
+    command: ["python","-u","sim_esp32.py"]
+    depends_on:
+      - mosquitto
+    networks:
+      - iot-network
+
+  # Arduino Nano 33 IoT simulators
+  device-sim-arduino:
+    build:
+      context: ./services/device-sim
+      dockerfile: Dockerfile
+    image: device-sim:latest
+    container_name: device-sim-arduino
+    restart: unless-stopped
+    environment:
+      - MQTT_BROKER=mosquitto
+      - MQTT_PORT=1883
+      - MQTT_USER=
+      - MQTT_PASS=
+      - NUM_DEVICES=2
+      - INTERVAL=6
+      - PYTHONUNBUFFERED=1
+    command: ["python","-u","sim_arduino.py"]
+    depends_on:
+      - mosquitto
+    networks:
+      - iot-network
+
+  # Raspberry Pi Pico W simulators
+  device-sim-pico:
+    build:
+      context: ./services/device-sim
+      dockerfile: Dockerfile
+    image: device-sim:latest
+    container_name: device-sim-pico
+    restart: unless-stopped
+    environment:
+      - MQTT_BROKER=mosquitto
+      - MQTT_PORT=1883
+      - MQTT_USER=
+      - MQTT_PASS=
+      - NUM_DEVICES=2
+      - INTERVAL=7
+      - PYTHONUNBUFFERED=1
+    command: ["python","-u","sim_pico.py"]
+    depends_on:
+      - mosquitto
+    networks:
+      - iot-network
+
+  # STM32 industrial simulators
+  device-sim-stm32:
+    build:
+      context: ./services/device-sim
+      dockerfile: Dockerfile
+    image: device-sim:latest
+    container_name: device-sim-stm32
+    restart: unless-stopped
+    environment:
+      - MQTT_BROKER=mosquitto
+      - MQTT_PORT=1883
+      - MQTT_USER=
+      - MQTT_PASS=
+      - NUM_DEVICES=1
+      - INTERVAL=5
+      - PYTHONUNBUFFERED=1
+    command: ["python","-u","sim_stm32.py"]
+    depends_on:
+      - mosquitto
     networks:
       - iot-network
 
